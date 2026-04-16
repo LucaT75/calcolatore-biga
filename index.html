@@ -1,12 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Calcolatore Biga</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 420px;
+      margin: auto;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    input {
+      font-size: 22px;
+      padding: 12px;
+      width: 80%;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: left;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🍞 Calcolatore Biga</h2>
+
+  <p>Inserisci farina impasto (grammi)</p>
+
+  <input 
+    type="number" 
+    id="farina" 
+    placeholder="es. 1000" 
+    oninput="calcola()"
+  >
+
+  <div class="result" id="output"></div>
+</div>
+
 <script>
 function calcola() {
-  let f = parseFloat(document.getElementById("farina").value);
-  if (!f) return;
 
-  // BIGA (30% del peso impasto)
+  let f = parseFloat(document.getElementById("farina").value);
+  if (!f) {
+    document.getElementById("output").innerHTML = "";
+    return;
+  }
+
+  // 🧱 BIGA (30% del peso impasto)
   let biga = f * 0.3;
 
-  // BIGA (44% idratazione)
+  // Biga idratazione 44%
   let bigaFarina = biga / 1.44;
   let bigaAcqua = biga - bigaFarina;
 
@@ -14,17 +91,18 @@ function calcola() {
   let lievitoBigaFresco = bigaFarina * 0.01;
   let lievitoBigaSecco = lievitoBigaFresco / 3;
 
-  // IMPASTO (percentuali su farina impasto)
+  // 🍞 IMPASTO (percentuali sulla farina impasto)
   let acquaImpasto = f * 0.60;
   let lievitoImpastoFresco = f * 0.01;
   let lievitoImpastoSecco = lievitoImpastoFresco / 3;
 
-  // 🔥 FARINA TOTALE (CORRETTO)
+  // 🔥 FARINA TOTALE
   let farinaTot = f + bigaFarina;
 
-  // 🔥 SALE CORRETTO (2% su totale farine)
+  // 🔥 SALE corretto (2% su farine totali)
   let sale = farinaTot * 0.02;
 
+  // OUTPUT
   document.getElementById("output").innerHTML = `
     <h3>🧱 Biga (30%)</h3>
     Peso: <b>${biga.toFixed(0)} g</b><br>
@@ -48,3 +126,6 @@ function calcola() {
   `;
 }
 </script>
+
+</body>
+</html>
