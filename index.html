@@ -14,20 +14,29 @@
     .box {
       background: white;
       padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
+      border-radius: 12px;
+      max-width: 420px;
       margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
     }
     input {
-      font-size: 20px;
-      padding: 10px;
+      font-size: 22px;
+      padding: 12px;
       width: 80%;
       margin: 10px 0;
     }
     .result {
       margin-top: 20px;
       text-align: left;
+      font-size: 18px;
+    }
+    h3 {
+      margin-bottom: 5px;
+    }
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -36,7 +45,7 @@
 <div class="box">
   <h2>🍞 Calcolatore Biga</h2>
 
-  <p>Inserisci farina totale (grammi)</p>
+  <p>Inserisci farina impasto (grammi)</p>
   <input type="number" id="farina" placeholder="es. 1000" oninput="calcola()">
 
   <div class="result" id="output"></div>
@@ -44,28 +53,50 @@
 
 <script>
 function calcola() {
-  let f = document.getElementById("farina").value;
+  let f = parseFloat(document.getElementById("farina").value);
   if (!f) return;
 
-  let bigaFarina = f * 0.3;
-  let bigaAcqua = bigaFarina * 0.44;
-  let bigaLievito = bigaFarina * 0.007;
+  // BIGA = 30% del peso impasto
+  let biga = f * 0.3;
 
-  let impFarina = f - bigaFarina;
-  let acquaTot = f * 0.65;
-  let impAcqua = acquaTot - bigaAcqua;
-  let sale = f * 0.02;
+  // BIGA (44% idratazione)
+  let bigaFarina = biga / 1.44;
+  let bigaAcqua = biga - bigaFarina;
+
+  // Lievito
+  let lievitoFresco = bigaFarina * 0.01;   // 1%
+  let lievitoSecco = lievitoFresco / 3;    // rapporto 1:3
+
+  // TOTALI
+  let farinaTot = f + bigaFarina;
+
+  // Acqua totale (65%)
+  let acquaTot = farinaTot * 0.65;
+  let acquaImpasto = acquaTot - bigaAcqua;
+
+  // Sale (2%)
+  let sale = farinaTot * 0.02;
 
   document.getElementById("output").innerHTML = `
-    <h3>🧱 Biga</h3>
+    <h3>🧱 Biga (30%)</h3>
+    Peso: <b>${biga.toFixed(0)} g</b><br>
     Farina: ${bigaFarina.toFixed(0)} g<br>
     Acqua: ${bigaAcqua.toFixed(0)} g<br>
-    Lievito: ${bigaLievito.toFixed(1)} g<br>
+    Lievito fresco: ${lievitoFresco.toFixed(1)} g<br>
+    Lievito secco: ${lievitoSecco.toFixed(1)} g<br>
 
     <h3>🍞 Impasto</h3>
-    Farina: ${impFarina.toFixed(0)} g<br>
-    Acqua: ${impAcqua.toFixed(0)} g<br>
+    Farina: ${f.toFixed(0)} g<br>
+    Acqua: ${acquaImpasto.toFixed(0)} g<br>
     Sale: ${sale.toFixed(0)} g<br>
+
+    <h3>📊 Totale</h3>
+    Farina totale: ${farinaTot.toFixed(0)} g<br>
+    Acqua totale: ${acquaTot.toFixed(0)} g<br>
+
+    <div class="note">
+      Nota: il peso della biga considera solo farina + acqua (lievito escluso)
+    </div>
   `;
 }
 </script>
