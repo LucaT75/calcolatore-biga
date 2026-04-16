@@ -56,46 +56,40 @@ function calcola() {
   let f = parseFloat(document.getElementById("farina").value);
   if (!f) return;
 
-  // BIGA = 30% del peso impasto
+  // BIGA (30% del peso impasto)
   let biga = f * 0.3;
 
   // BIGA (44% idratazione)
   let bigaFarina = biga / 1.44;
   let bigaAcqua = biga - bigaFarina;
 
-  // Lievito
-  let lievitoFresco = bigaFarina * 0.01;   // 1%
-  let lievitoSecco = lievitoFresco / 3;    // rapporto 1:3
+  // Lievito biga (1% farina biga)
+  let lievitoBigaFresco = bigaFarina * 0.01;
+  let lievitoBigaSecco = lievitoBigaFresco / 3;
 
-  // TOTALI
-  let farinaTot = f + bigaFarina;
-
-  // Acqua totale (65%)
-  let acquaTot = farinaTot * 0.65;
-  let acquaImpasto = acquaTot - bigaAcqua;
-
-  // Sale (2%)
-  let sale = farinaTot * 0.02;
+  // IMPASTO (percentuali sulla farina impasto)
+  let acquaImpasto = f * 0.60;
+  let sale = f * 0.02;
+  let lievitoImpastoFresco = f * 0.01;
+  let lievitoImpastoSecco = lievitoImpastoFresco / 3;
 
   document.getElementById("output").innerHTML = `
     <h3>🧱 Biga (30%)</h3>
     Peso: <b>${biga.toFixed(0)} g</b><br>
     Farina: ${bigaFarina.toFixed(0)} g<br>
     Acqua: ${bigaAcqua.toFixed(0)} g<br>
-    Lievito fresco: ${lievitoFresco.toFixed(1)} g<br>
-    Lievito secco: ${lievitoSecco.toFixed(1)} g<br>
+    Lievito fresco: ${lievitoBigaFresco.toFixed(1)} g<br>
+    Lievito secco: ${lievitoBigaSecco.toFixed(1)} g<br>
 
     <h3>🍞 Impasto</h3>
     Farina: ${f.toFixed(0)} g<br>
     Acqua: ${acquaImpasto.toFixed(0)} g<br>
     Sale: ${sale.toFixed(0)} g<br>
-
-    <h3>📊 Totale</h3>
-    Farina totale: ${farinaTot.toFixed(0)} g<br>
-    Acqua totale: ${acquaTot.toFixed(0)} g<br>
+    Lievito fresco: ${lievitoImpastoFresco.toFixed(0)} g<br>
+    Lievito secco: ${lievitoImpastoSecco.toFixed(1)} g<br>
 
     <div class="note">
-      Nota: il peso della biga considera solo farina + acqua (lievito escluso)
+      Nota: la biga è calcolata come farina + acqua (lievito escluso dal peso)
     </div>
   `;
 }
