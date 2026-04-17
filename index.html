@@ -1,126 +1,101 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8"> 
-  <title>Calcolatore Biga</title>
+  <meta charset="UTF-8">
+  <title>Calcolatore Biga (Metodo Impasto)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 20px;
-      background: #f4f4f4;
+      background: #f7f7f7;
     }
-
     .box {
       background: white;
       padding: 20px;
-      border-radius: 12px;
-      max-width: 420px;
+      border-radius: 10px;
+      max-width: 460px;
       margin: auto;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
-    h2 {
-      margin-bottom: 10px;
-    }
-
     input {
       font-size: 22px;
-      padding: 12px;
+      padding: 10px;
       width: 80%;
-      margin: 15px 0;
-      text-align: center;
+      margin: 10px 0;
     }
-
     .result {
       margin-top: 20px;
       text-align: left;
       font-size: 18px;
       line-height: 1.5;
     }
-
-    h3 {
-      margin-top: 20px;
-      margin-bottom: 5px;
-    }
-
     .note {
-      font-size: 13px;
-      color: #666;
-      margin-top: 15px;
+      font-size: 15px;
+      color: #555;
+      margin-top: 18px;
+      text-align: left;
     }
   </style>
 </head>
-
 <body>
 
 <div class="box">
   <h2>🍞 Calcolatore Biga</h2>
+  <p><b>Metodo: farina impasto</b></p>
 
   <p>Inserisci farina impasto (grammi)</p>
-
-  <input 
-    type="number" 
-    id="farina" 
-    placeholder="es. 1000" 
-    oninput="calcola()"
-  >
+  <input type="number" id="farina" placeholder="es. 5000" oninput="calcola()">
 
   <div class="result" id="output"></div>
+
+  <div class="note">
+    Biga: 28,8% della farina impasto • idratazione 44% • lievito 1%<br>
+    Impasto: acqua 60% • lievito 1% • malto 1% • sale 2% sulla farina totale
+  </div>
 </div>
 
 <script>
 function calcola() {
-
-  let f = parseFloat(document.getElementById("farina").value);
-  if (!f) {
+  let Fi = parseFloat(document.getElementById("farina").value);
+  if (!Fi) {
     document.getElementById("output").innerHTML = "";
     return;
   }
 
-  // 🧱 BIGA (30% del peso impasto)
-  let biga = f * 0.3;
+  // BIGA
+  let bigaTot = Fi * 0.288;
+  let farinaBiga = bigaTot / 1.44;
+  let acquaBiga = farinaBiga * 0.44;
+  let lievitoBigaFresco = farinaBiga * 0.01;
+  let lievitoBigaSecco = lievitoBigaFresco / 2;
 
-  // Biga idratazione 44%
-  let bigaFarina = biga / 1.44;
-  let bigaAcqua = biga - bigaFarina;
+  // FARINA TOTALE
+  let farinaTotale = Fi + farinaBiga;
 
-  // Lievito biga
-  let lievitoBigaFresco = bigaFarina * 0.01;
-  let lievitoBigaSecco = lievitoBigaFresco / 3;
+  // IMPASTO
+  let acquaImpasto = Fi * 0.60;
+  let lievitoImpastoFresco = Fi * 0.01;
+  let lievitoImpastoSecco = lievitoImpastoFresco / 2;
+  let malto = Fi * 0.01;
+  let sale = farinaTotale * 0.02;
 
-  // 🍞 IMPASTO (percentuali sulla farina impasto)
-  let acquaImpasto = f * 0.60;
-  let lievitoImpastoFresco = f * 0.01;
-  let lievitoImpastoSecco = lievitoImpastoFresco / 3;
-
-  // 🔥 FARINA TOTALE
-  let farinaTot = f + bigaFarina;
-
-  // 🔥 SALE corretto (2% su farine totali)
-  let sale = farinaTot * 0.02;
-
-  // OUTPUT
   document.getElementById("output").innerHTML = `
-    <h3>🧱 Biga (30%)</h3>
-    Peso: <b>${biga.toFixed(0)} g</b><br>
-    Farina: ${bigaFarina.toFixed(0)} g<br>
-    Acqua: ${bigaAcqua.toFixed(0)} g<br>
-    Lievito fresco: ${lievitoBigaFresco.toFixed(1)} g<br>
-    Lievito secco: ${lievitoBigaSecco.toFixed(1)} g<br>
+    <h3>🧱 Biga</h3>
+    Totale: ${bigaTot.toFixed(0)} g<br>
+    Farina: ${farinaBiga.toFixed(0)} g<br>
+    Acqua fredda: ${acquaBiga.toFixed(0)} g<br>
+    Lievito fresco: ${lievitoBigaFresco.toFixed(1)} g
+    <br><span style="font-size:16px;color:#555;">(secco: ${lievitoBigaSecco.toFixed(1)} g)</span><br>
 
     <h3>🍞 Impasto</h3>
-    Farina: ${f.toFixed(0)} g<br>
-    Acqua: ${acquaImpasto.toFixed(0)} g<br>
-    Lievito fresco: ${lievitoImpastoFresco.toFixed(0)} g<br>
-    Lievito secco: ${lievitoImpastoSecco.toFixed(1)} g<br>
-    ${sale.toFixed(0)} g (2% su farine totali)
-
-    <div class="note">
-      Nota: la biga è calcolata come farina + acqua (lievito escluso dal peso)
-    </div>
+    Farina impasto: ${Fi.toFixed(0)} g<br>
+    Acqua fredda (60%): ${acquaImpasto.toFixed(0)} g<br>
+    Lievito fresco (1%): ${lievitoImpastoFresco.toFixed(0)} g
+    <br><span style="font-size:16px;color:#555;">(secco: ${lievitoImpastoSecco.toFixed(1)} g)</span><br>
+    Malto (1%): ${malto.toFixed(0)} g<br>
+    Sale (2% farina totale): ${sale.toFixed(0)} g<br>
   `;
 }
 </script>
